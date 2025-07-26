@@ -1,0 +1,56 @@
+{
+	"name": "GridFinder",
+	"description": "A safe Omegga plugin.",
+	"author": "Bluester16",
+	"config": {
+		
+		"PermittedRoles": {
+			
+			"description": "Roles that have permission to use the commands.",
+			"type": "list",
+			"itemType": "string",
+			"default": []
+			
+		},
+		"UsageCooldown": {
+			
+			"description": "How long is the cooldown before you're allowed to use the /getgrids command. Represented in seconds.",
+			"type": "number",
+			"default": 1
+		}
+		
+	},
+	"commands": [
+		
+		{
+			"name": "/getgrids",
+			"description": "Gets all the grids in the world.",
+			"example": "/getgrids last owner:Bluester16",
+			"args": [
+				{
+					"name": "last",
+					"description": "Shows last placed grids first.",
+					"required": false
+				},
+				{
+					"name": "owner:(player name)",
+					"description": "List specified player's grids.",
+					"required": false
+				}
+			]
+		},
+		{
+			"name": "/tptogrid",
+			"description": "Teleports to a selected grid.",
+			"example": "/tptogrid 12",
+			"args": [
+				{
+					"name": "index",
+					"description": "Index of the grid from the /getgrids list.",
+					"required": true
+				}
+			]
+		}
+		
+	]
+}
