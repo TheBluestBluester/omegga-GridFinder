@@ -20,11 +20,19 @@ Allows you to locate physics objects!
 ## Usage
 
 ### /getgrids (last) (owner:(name))
+
 Fetches all the grids. Running this command is necessary for /tptogrid to work.
+
 Args:
+
 `last`: Lists grids from last to first.
+
 `owner:(name)` Lists grids of a specified player. **Does not use display names.**
+
 ### /tptogrid (index)
+
 Teleports you to the specified grid.
+
 Args:
+
 `index`: The index of the grid on the /getgrids list.
