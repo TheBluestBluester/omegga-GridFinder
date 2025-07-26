@@ -11,19 +11,20 @@ Your plugin will be installed via omegga install gh:Bluester16/GridFinder
 
 # GridFinder
 
-A safe plugin for [omegga](https://github.com/brickadia-community/omegga).
-
-This is an auto-generated README file. Please change it before publishing your plugin!
-
-Be sure to edit the script in `setup.sh` to configure your plugin on install, or
-remove it entirely if it is unnecessary.
+Allows you to locate physics objects!
 
 ## Install
 
-`omegga install gh:Bluester16/GridFinder`
-
-_TODO: more steps...?_
+`omegga install gh:TheBluestBluester/GridFinder`
 
 ## Usage
 
-_TODO: include some usage information_
+### /getgrids (last) (owner:(name))
+Fetches all the grids. Running this command is necessary for /tptogrid to work.
+Args:
+`last`: Lists grids from last to first.
+`owner:(name)` Lists grids of a specified player. **Does not use display names.**
+### /tptogrid (index)
+Teleports you to the specified grid.
+Args:
+`index`: The index of the grid on the /getgrids list.
