@@ -29,6 +29,18 @@ Args:
 
 `owner:(name)` Lists grids of a specified player. **Does not use display names.**
 
+### /getents (last) (owner:(name)) (type:(name))
+
+Fetches all the entities. Also works with /tptogrid.
+
+Args:
+
+`last`: Lists entities from last to first.
+
+`owner:(name)` Lists entities of a specified player. **Does not use display names.**
+
+`type:(name)` Lists entities of a specific type.
+
 ### /tptogrid (index)
 
 Teleports you to the specified grid.
