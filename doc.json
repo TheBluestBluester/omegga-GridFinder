@@ -16,7 +16,7 @@
 			
 			"description": "How long is the cooldown before you're allowed to use the /getgrids command. Represented in seconds.",
 			"type": "number",
-			"default": 1
+			"default": 2
 		}
 		
 	},
@@ -34,7 +34,29 @@
 				},
 				{
 					"name": "owner:(player name)",
-					"description": "List specified player's grids.",
+					"description": "Lists specified player's grids.",
+					"required": false
+				}
+			]
+		},
+		{
+			"name": "/getents",
+			"description": "Gets all the entities in the world.",
+			"example": "/getents last owner:Bluester16 type:steelie",
+			"args": [
+				{
+					"name": "last",
+					"description": "Shows last placed entities first.",
+					"required": false
+				},
+				{
+					"name": "owner:(player name)",
+					"description": "Lists specified player's entities.",
+					"required": false
+				},
+				{
+					"name": "type:(player name)",
+					"description": "Lists entities of specific type.",
 					"required": false
 				}
 			]
