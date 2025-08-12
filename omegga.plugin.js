@@ -51,33 +51,14 @@ module.exports = class Plugin {
 		}catch(e){console.log(e)}
 	}
 	
-	async GetGridLocation(gridId) {
+	async GetEntityLocation(actorName, entityName, entityID) {
 		try{
-		const reg = new RegExp(`BrickGridComponent.+RelativeLocation =.+X=(?<X>.+),Y=(?<Y>.+),Z=(?<Z>.+).`);
+		const reg = new RegExp(`${actorName[1]}.+RelativeLocation =.+X=(?<X>.+),Y=(?<Y>.+),Z=(?<Z>.+).`);
 		
 		const data = await this.omegga.addWatcher(reg, {
 			exec: () =>
 			this.omegga.writeln(
-				`GetAll BrickGridComponent RelativeLocation Outer=BrickGridDynamicActor_${gridId}`
-			),
-			first: 'index',
-			timeoutDelay: 500
-		});
-		
-		return [Number(data[0].groups.X), Number(data[0].groups.Y), Number(data[0].groups.Z)];
-		
-		}catch(e){console.log(e)}
-		
-	}
-	
-	async GetEntityLocation(entityName, entityID) {
-		try{
-		const reg = new RegExp(`BRSpherePhysicsStaticMeshComponent.+RelativeLocation =.+X=(?<X>.+),Y=(?<Y>.+),Z=(?<Z>.+).`);
-		
-		const data = await this.omegga.addWatcher(reg, {
-			exec: () =>
-			this.omegga.writeln(
-				`GetAll MeshComponent RelativeLocation Outer=${entityName}_${entityID}` // GetAll StaticMesh RelativeLocation Outer=${entityName}_${entityID}
+				`GetAll ${actorName[0]} RelativeLocation Outer=${entityName}_${entityID}`
 			),
 			first: 'index',
 			timeoutDelay: 500
@@ -265,7 +246,7 @@ module.exports = class Plugin {
 			for(let i in grids) {
 				
 				const grid = grids[i];
-				const gridLoc = await this.GetGridLocation(grid.id);
+				const gridLoc = await this.GetEntityLocation(["BrickGridComponent", "BrickGridComponent"], "BrickGridDynamicActor", grid.id);
 				const gridOwner = brickOwners[grid.ownerId].displayName;
 				
 				let ind = Number(i) + 1;
@@ -368,7 +349,7 @@ module.exports = class Plugin {
 				
 				const entity = entities[i];
 				const entityName = "BP_Entity_" + entity.trueName + "_C";
-				const entityLoc = await this.GetEntityLocation(entityName, entity.id);
+				const entityLoc = await this.GetEntityLocation(["MeshComponent", "BRSpherePhysicsStaticMeshComponent"], entityName, entity.id);
 				const entityOwner = brickOwners[entity.ownerId].displayName;
 				
 				let ind = Number(i) + 1;
