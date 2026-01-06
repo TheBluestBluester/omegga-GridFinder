@@ -1,4 +1,6 @@
 
+const vec = require('./vectorOperations');
+
 let playerLists = {};
 
 const clr = {
@@ -214,6 +216,9 @@ module.exports = class Plugin {
 			const invertOrder = args.includes("last");
 			let ownerToCheck = -1;
 			const argInd = args.findIndex((e) => e.includes("owner:"));
+
+			let minRange = 0;
+			let maxRange = 0;
 			
 			this.omegga.whisper(name, clr.msg + "Fetching grids...");
 			
@@ -228,19 +233,63 @@ module.exports = class Plugin {
 			if(argInd >= 0) {
 				
 				let target = args[argInd].replace(/owner:/, "");
+				
 				if(target == "self") target = (await this.omegga.findPlayerByName(name)).displayName;
 				
 				ownerToCheck = this.fuzzySearch(brickOwners, target);
 				
 			}
 			
-			const grids = await this.GetDynamicGrids(invertOrder, ownerToCheck);
+			const minInd = args.findIndex((e) => e.includes("min:"));
+			const maxInd = args.findIndex((e) => e.includes("max:"));
+			if(minInd >= 0) {
+				const targetMin = Number(args[minInd].replace(/min:/, ""));
+				if(!isNaN(targetMin)) minRange = targetMin;
+			}
+			if(maxInd >= 0) {
+				const targetMax = Number(args[maxInd].replace(/max:/, ""));
+				if(!isNaN(targetMax)) maxRange = targetMax;
+			}
+			
+			let grids = await this.GetDynamicGrids(invertOrder, ownerToCheck);
 			if(!grids) {
 				this.omegga.whisper(name, clr.err + "Failed to fetch grids.");
 				return;
 			}
 			
 			let gridList = [];
+			let gridPosList = [];
+
+			if(maxRange > 0 || minRange > 0) {
+				
+				const player = this.omegga.getPlayer(name);
+				if(!player) {
+					this.omegga.whisper(name, clr.err + "Failed getting player location.");
+					return;
+				}
+				const playerPos = await player.getPosition();
+				if(!playerPos) {
+					this.omegga.whisper(name, clr.err + "Failed getting player location.");
+					return;
+				}
+				
+				let tempList = [];
+				for(let i in grids) {
+					
+					const grid = grids[i];
+					const gridLoc = await this.GetEntityLocation(["BrickGridComponent", "BrickGridComponent"], "BrickGridDynamicActor", grid.id);
+					
+					const distance = vec.len(vec.sub(gridLoc, playerPos)) / 10;
+					if(distance > minRange && (distance < maxRange || maxRange == 0)) {
+						tempList.push(grid);
+						gridPosList.push(grid);
+					}
+					
+				}
+				
+				grids = tempList;
+				
+			}
 			
 			let decrement = 0;
 			for(let i in grids) {
