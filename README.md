@@ -29,6 +29,10 @@ Args:
 
 `owner:(name)` Lists grids of a specified player. **Does not use display names.**
 
+`max:(distance in studs)` Filters entities by distance to player.
+
+`min:(distance in studs)` Same as max but filters out entities that are too close.
+
 ### /getents (last) (owner:(name)) (type:(name))
 
 Fetches all the entities. Also works with /tptogrid.
@@ -40,6 +44,10 @@ Args:
 `owner:(name)` Lists entities of a specified player. **Does not use display names.**
 
 `type:(name)` Lists entities of a specific type.
+
+`max:(distance in studs)` Filters entities by distance to player.
+
+`min:(distance in studs)` Same as max but filters out entities that are too close.
 
 ### /tptogrid (index)
 
