@@ -358,6 +358,9 @@ module.exports = class Plugin {
 			let ownerToCheck = -1;
 			const argInd = args.findIndex((e) => e.includes("owner:"));
 			
+			let minRange = 0;
+			let maxRange = 0;
+			
 			this.omegga.whisper(name, clr.msg + "Fetching entities...");
 			
 			const brickOwners = await this.GetBrickOwnerTable();
@@ -377,6 +380,17 @@ module.exports = class Plugin {
 				
 			}
 			
+			const minInd = args.findIndex((e) => e.includes("min:"));
+			const maxInd = args.findIndex((e) => e.includes("max:"));
+			if(minInd >= 0) {
+				const targetMin = Number(args[minInd].replace(/min:/, ""));
+				if(!isNaN(targetMin)) minRange = targetMin;
+			}
+			if(maxInd >= 0) {
+				const targetMax = Number(args[maxInd].replace(/max:/, ""));
+				if(!isNaN(targetMax)) maxRange = targetMax;
+			}
+			
 			let entities = await this.GetAllEntities(invertOrder, ownerToCheck);
 			if(!entities) {
 				this.omegga.whisper(name, clr.err + "Failed to fetch entities.");
@@ -392,6 +406,39 @@ module.exports = class Plugin {
 			}
 			
 			let entList = [];
+			let entPosList = [];
+
+			if(maxRange > 0 || minRange > 0) {
+				
+				const player = this.omegga.getPlayer(name);
+				if(!player) {
+					this.omegga.whisper(name, clr.err + "Failed getting player location.");
+					return;
+				}
+				const playerPos = await player.getPosition();
+				if(!playerPos) {
+					this.omegga.whisper(name, clr.err + "Failed getting player location.");
+					return;
+				}
+				
+				let tempList = [];
+				for(let i in entities) {
+					
+					const entity = entities[i];
+					const entityName = "BP_Entity_" + entity.trueName + "_C";
+					const entityLoc = await this.GetEntityLocation(["MeshComponent", "BRSpherePhysicsStaticMeshComponent"], entityName, entity.id);
+					
+					const distance = vec.len(vec.sub(entityLoc, playerPos)) / 10;
+					if(distance > minRange && (distance < maxRange || maxRange == 0)) {
+						tempList.push(entity);
+						entPosList.push(entity);
+					}
+					
+				}
+				
+				entities = tempList;
+				
+			}
 			
 			let decrement = 0;
 			for(let i in entities) {
